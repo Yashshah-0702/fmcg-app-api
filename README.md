@@ -1,4 +1,4 @@
-<h1 align="center">
+<!-- <h1 align="center">
   <br>
   <img src="https://miro.medium.com/v2/resize:fit:826/1*lkp5yztcHJ1yPMLWQc4dwA.png" alt="Project Logo" />
   <br>
@@ -104,4 +104,4 @@ Before starting the project, make sure to set up your database credentials in th
 [![Forkers repo roster for @ahmadjoya/typescript-express-mongoose-starter](https://reporoster.com/forks/ahmadjoya/typescript-express-mongoose-starter)](https://github.com/ahmadjoya/typescript-express-mongoose-starter/network/members)
 ## Contributions
 
-Contributions, bug reports, and feature requests are always welcome! If you encounter any issues or have ideas to improve the starter template, please feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/ahmadjoya/typescript-express-mongoose-starter).
+Contributions, bug reports, and feature requests are always welcome! If you encounter any issues or have ideas to improve the starter template, please feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/ahmadjoya/typescript-express-mongoose-starter). -->

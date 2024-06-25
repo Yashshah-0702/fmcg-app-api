@@ -1,0 +1,44 @@
+import { hash } from 'bcrypt';
+import { CreateUserDto } from '@dtos/users.dto';
+import { HttpException } from '@exceptions/HttpException';
+import { User } from '@interfaces/users.interface';
+import userModel from '@models/users.model';
+import { isEmpty } from '@utils/util';
+
+class UserService {
+  public users = userModel;
+
+  public async findAllUser(type:number): Promise<User[]> {
+    const users: User[] = await this.users.find({user_type:type});
+    return users;
+  }
+
+  public async findOneUser(input:object): Promise<User> {
+    const user: User = await this.users.findOne(input);
+    return user;
+  }
+
+  public async createUser(userData: CreateUserDto ): Promise<User> {
+    const hashedPassword = await hash(userData.password, 10);
+    const createUserData: User = await this.users.create({ ...userData, password: hashedPassword });
+    return createUserData;
+  }
+
+
+  public async updateUser(userId:string, userData: CreateUserDto): Promise<User> {
+    if (userData.password) {
+      const hashedPassword = await hash(userData.password, 10);
+      userData = { ...userData, password: hashedPassword };
+    }
+
+    const updateUserById: User = await this.users.findByIdAndUpdate(userId, { userData });
+    return updateUserById;
+  }
+
+  public async deleteUser(userId: string): Promise<User> {
+    const deleteUserById: User = await this.users.findByIdAndDelete(userId);
+    return deleteUserById;
+  }
+}
+
+export default UserService;

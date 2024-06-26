@@ -1,6 +1,5 @@
 import { hash } from 'bcrypt';
 import { CreateUserDto } from '@dtos/users.dto';
-import { HttpException } from '@exceptions/HttpException';
 import { User } from '@interfaces/users.interface';
 import userModel from '@models/users.model';
 import { isEmpty } from '@utils/util';
@@ -31,12 +30,21 @@ class UserService {
       userData = { ...userData, password: hashedPassword };
     }
 
-    const updateUserById: User = await this.users.findByIdAndUpdate(userId, { userData });
+    const updateUserById: User = await this.users.findOneAndUpdate(
+      { _id: userId },
+      { $set: userData },
+      { new: true }
+    );
+    // .findByIdAndUpdate({_id:userId}, { userData });
     return updateUserById;
   }
 
+
   public async deleteUser(userId: string): Promise<User> {
-    const deleteUserById: User = await this.users.findByIdAndDelete(userId);
+    const deleteUserById: User = await this.users.findOneAndDelete(
+      { _id: userId },
+      { new: true }
+    );
     return deleteUserById;
   }
 }

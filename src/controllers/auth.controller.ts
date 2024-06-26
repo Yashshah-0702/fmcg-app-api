@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
-import { CreateUserDto , LoginUserDto } from '@dtos/users.dto';
-import { DataStoredInToken } from '@interfaces/auth.interface';
+import { Request, Response } from 'express';
+import { CreateUserDto , LoginUserDto, PassowrdDto } from '@dtos/users.dto';
+import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import UserService from '@/services/users.service';
 import { success, failure } from '@/utils/response.utils';
@@ -12,12 +12,12 @@ import { sign } from 'jsonwebtoken';
 class AuthController {
   public userService = new UserService();
 
-  public signUp = async (req: Request, res: Response, next: NextFunction) => {
+  public signUp = async (req: Request, res: Response) => {
     try {
       const userData: CreateUserDto = req.body;
-      const Type = req.params.type
-      let type = 2;
-      if(Type === "admin"){
+      const userType = req.params.type
+      let type:number = 2;
+      if(userType === "admin"){
          type = 1
       }
 
@@ -38,7 +38,7 @@ class AuthController {
     }
   };
 
-  public logIn = async (req: Request, res: Response, next: NextFunction) => {
+  public logIn = async (req: Request, res: Response) => {
     try {
       const userData: LoginUserDto = req.body;
       const findUser: User = await this.userService.findOneUser({ email: userData.email });
@@ -53,11 +53,29 @@ class AuthController {
        token,
        findUser,
       }
-      return success(res,httpStatusCodes.CREATED,"login successfull",data)
+      return success(res,httpStatusCodes.SUCCESS,"login successfull",data)
     } catch (error) {
       return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server Error",{})
     }
   };
+
+  // public changePassword = async(req:RequestWithUser,res:Response)=>{
+  //   try {
+  //     const user: User = req.user;
+  //     let userId: string = user._id;
+  //     if(user.user_type === 1){
+  //       userId = req.params.id;
+  //     }
+  //     const userData:PassowrdDto=req.body
+  //     if(userData.newPassword !== userData.confirmPassword){
+  //       return failure(res,httpStatusCodes.BAD_REQUEST,"password does not match",{})
+  //     }
+  //     const updateUser:User = await this.userService.updateUser(userId,{password:userData.newPassword})
+  //     return success(res,httpStatusCodes.SUCCESS,"password updated",updateUser)
+  //   } catch (error) {
+  //     return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server Error",{})
+  //   }
+  // }
 
   // public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   //   try {

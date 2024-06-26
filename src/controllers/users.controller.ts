@@ -5,6 +5,7 @@ import userService from '@services/users.service';
 import { success, failure } from '@/utils/response.utils';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import { httpStatusCodes } from '@/constants/httpStatusCodes.constants';
+import { hash } from 'bcrypt';
 
 class UsersController {
   public userService = new userService();
@@ -37,48 +38,56 @@ class UsersController {
     }
   };
 
-  public getUserById = async (req: Request, res: Response, next: NextFunction) => {
+  public getUserById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const userId: string = req.params.id;
+      const userData: User = req.user;
+      let userId: string = userData._id;
+      if(userData.user_type === 1){
+        userId = req.body.id;
+      }
       const findOneUserData: User = await this.userService.findOneUser({_id:userId});
+      if(!findOneUserData){
+        return failure(res,httpStatusCodes.NOT_FOUND,"User not found",{})
+      }
 
-      res.status(200).json({ data: findOneUserData, message: 'findOne' });
+      return success(res,httpStatusCodes.SUCCESS,"User profile fetched succesfully",findOneUserData)
     } catch (error) {
-      next(error);
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
     }
   };
 
-  public createUser = async (req: Request, res: Response, next: NextFunction) => {
+  public updateUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const userData: CreateUserDto = req.body;
-      const createUserData: User = await this.userService.createUser(userData);
-
-      res.status(201).json({ data: createUserData, message: 'created' });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  public updateUser = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const userId: string = req.params.id;
-      const userData: CreateUserDto = req.body;
+      const user: User = req.user;
+      let userId: string = user._id;
+      if(user.user_type === 1){
+        userId = req.params.id;
+      }
+      let userData: CreateUserDto = req.body;
       const updateUserData: User = await this.userService.updateUser(userId, userData);
-
-      res.status(200).json({ data: updateUserData, message: 'updated' });
+      if(!updateUserData){
+        return failure(res,httpStatusCodes.NOT_FOUND,"User not found",{})
+      }
+      return success(res,httpStatusCodes.SUCCESS,"User updated",updateUserData)
     } catch (error) {
-      next(error);
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
     }
   };
 
-  public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+  public deleteUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const userId: string = req.params.id;
+      const user: User = req.user;
+      let userId: string = user._id;
+      if(user.user_type === 1){
+        userId = req.params.id;
+      }
       const deleteUserData: User = await this.userService.deleteUser(userId);
-
-      res.status(200).json({ data: deleteUserData, message: 'deleted' });
+      if(!deleteUserData){
+        return failure(res,httpStatusCodes.NOT_FOUND,"User not found",{})
+      }
+      return success (res,httpStatusCodes.SUCCESS,"User deleted",{})
     } catch (error) {
-      next(error);
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
     }
   };
 }

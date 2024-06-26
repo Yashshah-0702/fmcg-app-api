@@ -1,7 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 import { RequestHandler } from 'express';
-import { HttpException } from '@exceptions/HttpException';
 import { failure } from '@/utils/response.utils';
 import { httpStatusCodes } from '@/constants/httpStatusCodes.constants';
 

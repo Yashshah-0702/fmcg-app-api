@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response  } from 'express';
+import {  Response  } from 'express';
 import { CreateUserDto } from '@dtos/users.dto';
 import { User } from '@interfaces/users.interface';
 import userService from '@services/users.service';
@@ -10,7 +10,7 @@ import { hash } from 'bcrypt';
 class UsersController {
   public userService = new userService();
 
-  public getAdmins = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public getAdmins = async (req: RequestWithUser, res: Response) => {
     try {
       const userData: User = req.user;
       if(userData.user_type !== 1){
@@ -20,11 +20,11 @@ class UsersController {
 
      return success(res,httpStatusCodes.SUCCESS,"Admins fetched succesfully",findAllUsersData)
     } catch (error) {
-      next(error);
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
     }
   }
 
-  public getUsers = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public getUsers = async (req: RequestWithUser, res: Response) => {
     try {
       const userData: User = req.user;
       if(userData.user_type !== 1){
@@ -34,16 +34,16 @@ class UsersController {
 
      return success(res,httpStatusCodes.SUCCESS,"Users fetched succesfully",findAllUsersData)
     } catch (error) {
-      next(error);
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
     }
   };
 
-  public getUserById = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public getUserById = async (req: RequestWithUser, res: Response) => {
     try {
       const userData: User = req.user;
       let userId: string = userData._id;
       if(userData.user_type === 1){
-        userId = req.body.id;
+        userId = req.params.id;
       }
       const findOneUserData: User = await this.userService.findOneUser({_id:userId});
       if(!findOneUserData){
@@ -56,7 +56,7 @@ class UsersController {
     }
   };
 
-  public updateUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public updateUser = async (req: RequestWithUser, res: Response) => {
     try {
       const user: User = req.user;
       let userId: string = user._id;
@@ -74,7 +74,7 @@ class UsersController {
     }
   };
 
-  public deleteUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+  public deleteUser = async (req: RequestWithUser, res: Response) => {
     try {
       const user: User = req.user;
       let userId: string = user._id;

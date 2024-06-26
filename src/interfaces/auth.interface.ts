@@ -14,4 +14,6 @@ export interface TokenData {
 
 export interface RequestWithUser extends Request {
   user: User;
+  file:any;
+  media_details:any;
 }

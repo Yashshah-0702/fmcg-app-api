@@ -16,8 +16,11 @@ class ProductRoutes implements Routes{
     }
 
     private initializeRoutes(){
-        this.router.get(`${this.path}`)
+        this.router.get(`${this.path}`,this.productsController.getProducts)
+        this.router.get(`${this.path}/:id`,this.productsController.getProductById)
         this.router.post(`${this.path}`,authMiddleware,uploadImgMiddleware,validationMiddleware(CreateProductDto,'body'),this.productsController.createProduct)
+        this.router.put(`${this.path}/:id`,authMiddleware,uploadImgMiddleware,validationMiddleware(CreateProductDto,'body',true),this.productsController.updateProduct)
+        this.router.delete(`${this.path}/:id`,authMiddleware,uploadImgMiddleware,this.productsController.deleteProduct)
     }
 }
 export default ProductRoutes;

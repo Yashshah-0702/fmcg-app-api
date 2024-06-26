@@ -1,10 +1,3 @@
-// import multer from 'multer';
-// import path from 'path';
-// import fs from 'fs';
-// import { failure } from './response.utils';
-// import { httpStatusCodes } from '@/constants/httpStatusCodes.constants';
-// import { MAIN_UPLOAD_DIR, IMAGE_PATH } from '@/config';
-// import { globalConstants } from '@/constants/globalConstants.constants';
 import multer, { FileFilterCallback } from 'multer';
 import path from 'path';
 import fs from 'fs';

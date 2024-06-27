@@ -1,13 +1,14 @@
 import { CreateProductDto } from "@/dtos/products.dto";
 import { Product } from "@/interfaces/products.interface";
 import productModel from "@/models/product.model";
+import { SortOrder } from "mongoose";
 
 class ProductService{
     public products = productModel;
 
     public async findAllProducts(page: number , limit: number , sortField: string , sortOrder: string): Promise<Product[]>{
         const skip = (page - 1) * limit;
-        const sort = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+        const sort: { [key: string]: SortOrder } = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
         const products: Product[] = await this.products.find().sort(sort)
         .skip(skip)
         .limit(limit);

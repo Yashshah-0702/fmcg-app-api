@@ -5,36 +5,37 @@ import userService from '@services/users.service';
 import { success, failure } from '@/utils/response.utils';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import { httpStatusCodes } from '@/constants/httpStatusCodes.constants';
-import { hash } from 'bcrypt';
 
 class UsersController {
   public userService = new userService();
 
   public getAdmins = async (req: RequestWithUser, res: Response) => {
     try {
-      const page = req.query.page || 1;
-      const limit = req.query.limit || 10;
-      const sortField = req.query.sortField || 'createdAt';
-      const sortOrder = req.query.sortOrder || 'asc';
-      const userData: User = req.user;
-      if(userData.user_type !== 1){
-        return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied",{})
-      }
-      const findAllUsersData: User[] = await this.userService.findAllUser(1,page,limit,sortField,sortOrder);
+        const page = parseInt(req.query.page as string, 10) || 1;
+        const limit = parseInt(req.query.limit as string, 10) || 10;
+        const sortField = req.query.sortField as string || 'createdAt';
+        const sortOrder = req.query.sortOrder as string || 'asc';
+        const userData: User = req.user;
 
-     return success(res,httpStatusCodes.SUCCESS,"Admins fetched succesfully",findAllUsersData)
+        if (userData.user_type !== 1) {
+            return failure(res, httpStatusCodes.UNAUTHORIZED, "Access Denied", {});
+        }
+
+        const findAllUsersData: User[] = await this.userService.findAllUser(1, page, limit, sortField, sortOrder);
+
+        return success(res, httpStatusCodes.SUCCESS, "Admins fetched successfully", findAllUsersData);
     } catch (error) {
-      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
+        return failure(res, httpStatusCodes.INTERNAL_SERVER_ERROR, "Server error", {});
     }
-  }
+}
 
   public getUsers = async (req: RequestWithUser, res: Response) => {
     try {
       const userData: User = req.user;
-      const page = req.query.page || 1;
-      const limit = req.query.limit || 10;
-      const sortField = req.query.sortField || 'createdAt';
-      const sortOrder = req.query.sortOrder || 'asc';
+      const page = parseInt(req.query.page as string, 10) || 1;
+      const limit = parseInt(req.query.limit as string, 10) || 10;
+      const sortField = req.query.sortField as string || 'createdAt';
+      const sortOrder = req.query.sortOrder as string || 'asc';
       if(userData.user_type !== 1){
         return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied",{})
       }

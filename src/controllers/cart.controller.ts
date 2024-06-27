@@ -16,10 +16,10 @@ class CartController{
 
     public getCart = async(req:RequestWithUser,res:Response) => {
         try {
-            const page = req.query.page || 1;
-            const limit = req.query.limit || 10;
-            const sortField = req.query.sortField || 'createdAt';
-            const sortOrder = req.query.sortOrder || 'asc';
+            const page = parseInt(req.query.page as string, 10) || 1;
+            const limit = parseInt(req.query.limit as string, 10) || 10;
+            const sortField = req.query.sortField as string || 'createdAt';
+            const sortOrder = req.query.sortOrder as string || 'asc';
             const userId = req.user;
             if(userId.user_type!==1){
                 return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied")

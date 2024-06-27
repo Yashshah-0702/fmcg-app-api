@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import UsersController from '@controllers/users.controller';
-import { CreateUserDto } from '@dtos/users.dto';
+import { UpdateUserDto } from '@dtos/users.dto';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import authMiddleware from '@/middlewares/auth.middleware';
@@ -20,8 +20,8 @@ class UsersRoute implements Routes {
     this.router.get(`${this.admin}`, authMiddleware ,this.usersController.getAdmins);
     this.router.post(`${this.path}`,authMiddleware,this.usersController.getUserById);
     // this.router.post(`${this.path}/updateUser`, validationMiddleware(CreateUserDto, 'body'), this.usersController.createUser);
-    this.router.put(`${this.path}/:id`, authMiddleware,validationMiddleware(CreateUserDto, 'body', true), this.usersController.updateUser);
-    this.router.delete(`${this.path}/:id`, authMiddleware ,this.usersController.deleteUser);
+    this.router.put(`${this.path}`, authMiddleware,validationMiddleware(UpdateUserDto, 'body', true), this.usersController.updateUser);
+    this.router.delete(`${this.path}`, authMiddleware ,this.usersController.deleteUser);
   }
 }
 

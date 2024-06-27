@@ -110,6 +110,7 @@ class ProductsController{
             const deleteProductData:Product = await this.productService.deleteProduct(req.params.id);
             return success(res,httpStatusCodes.SUCCESS,"Product deleted successfully",[])
         } catch (error) {
+            console.log(error)
             return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")
         }
     }

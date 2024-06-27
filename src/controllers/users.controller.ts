@@ -70,9 +70,13 @@ class UsersController {
       const user: User = req.user;
       let userId: string = user._id;
       if(user.user_type === 1){
-        userId = req.params.id;
+        userId = req.body.id;
       }
       let userData: CreateUserDto = req.body;
+      const userEmail = await this.userService.findOneUser({_id:userId});
+      if(userEmail.email === userData.email){
+        return failure(res,httpStatusCodes.BAD_REQUEST,"User already exist")
+      }
       const updateUserData: User = await this.userService.updateUser(userId, userData);
       if(!updateUserData){
         return failure(res,httpStatusCodes.NOT_FOUND,"User not found")
@@ -94,7 +98,7 @@ class UsersController {
       if(!deleteUserData){
         return failure(res,httpStatusCodes.NOT_FOUND,"User not found")
       }
-      return success (res,httpStatusCodes.SUCCESS,"User deleted",[])
+      return success (res,httpStatusCodes.SUCCESS,"User deleted successfully",[])
     } catch (error) {
       return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")
     }

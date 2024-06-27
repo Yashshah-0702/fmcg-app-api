@@ -5,8 +5,12 @@ import productModel from "@/models/product.model";
 class ProductService{
     public products = productModel;
 
-    public async findAllProducts(): Promise<Product[]>{
-        const products: Product[] = await this.products.find();
+    public async findAllProducts(page: number , limit: number , sortField: string , sortOrder: string): Promise<Product[]>{
+        const skip = (page - 1) * limit;
+        const sort = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+        const products: Product[] = await this.products.find().sort(sort)
+        .skip(skip)
+        .limit(limit);
         return products;
     
     }

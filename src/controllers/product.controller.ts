@@ -23,7 +23,11 @@ class ProductsController{
 
     public getProducts = async(req:Request,res:Response) => {
         try {
-            const products:Product[] = await this.productService.findAllProducts();
+            const page = req.query.page || 1;
+            const limit = req.query.limit || 10;
+            const sortField = req.query.sortField || 'createdAt';
+            const sortOrder = req.query.sortOrder || 'asc';
+            const products:Product[] = await this.productService.findAllProducts(page,limit,sortField,sortOrder);
             return success(res,httpStatusCodes.SUCCESS,"Products fetched successfully",products)
         } catch (error) {
             return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")

@@ -12,11 +12,15 @@ class UsersController {
 
   public getAdmins = async (req: RequestWithUser, res: Response) => {
     try {
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 10;
+      const sortField = req.query.sortField || 'createdAt';
+      const sortOrder = req.query.sortOrder || 'asc';
       const userData: User = req.user;
       if(userData.user_type !== 1){
         return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied",{})
       }
-      const findAllUsersData: User[] = await this.userService.findAllUser(1);
+      const findAllUsersData: User[] = await this.userService.findAllUser(1,page,limit,sortField,sortOrder);
 
      return success(res,httpStatusCodes.SUCCESS,"Admins fetched succesfully",findAllUsersData)
     } catch (error) {
@@ -27,10 +31,14 @@ class UsersController {
   public getUsers = async (req: RequestWithUser, res: Response) => {
     try {
       const userData: User = req.user;
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 10;
+      const sortField = req.query.sortField || 'createdAt';
+      const sortOrder = req.query.sortOrder || 'asc';
       if(userData.user_type !== 1){
         return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied",{})
       }
-      const findAllUsersData: User[] = await this.userService.findAllUser(2);
+      const findAllUsersData: User[] = await this.userService.findAllUser(2,page,limit,sortField,sortOrder);
 
      return success(res,httpStatusCodes.SUCCESS,"Users fetched succesfully",findAllUsersData)
     } catch (error) {
@@ -43,7 +51,7 @@ class UsersController {
       const userData: User = req.user;
       let userId: string = userData._id;
       if(userData.user_type === 1){
-        userId = req.params.id;
+        userId = req.body.id;
       }
       const findOneUserData: User = await this.userService.findOneUser({_id:userId});
       if(!findOneUserData){

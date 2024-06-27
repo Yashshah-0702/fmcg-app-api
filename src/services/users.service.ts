@@ -7,8 +7,12 @@ import { isEmpty } from '@utils/util';
 class UserService {
   public users = userModel;
 
-  public async findAllUser(type:number): Promise<User[]> {
-    const users: User[] = await this.users.find({user_type:type});
+  public async findAllUser(type:number,page: number , limit: number , sortField: string , sortOrder: string ): Promise<User[]> {
+    const skip = (page - 1) * limit;
+    const sort = { [sortField]: sortOrder === 'asc' ? 1 : -1 };
+    const users: User[] = await this.users.find({user_type:type}) .sort(sort)
+    .skip(skip)
+    .limit(limit);;
     return users;
   }
 

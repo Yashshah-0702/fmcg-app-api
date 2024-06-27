@@ -16,11 +16,15 @@ class CartController{
 
     public getCart = async(req:RequestWithUser,res:Response) => {
         try {
+            const page = req.query.page || 1;
+            const limit = req.query.limit || 10;
+            const sortField = req.query.sortField || 'createdAt';
+            const sortOrder = req.query.sortOrder || 'asc';
             const userId = req.user;
             if(userId.user_type!==1){
                 return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied")
             }
-            const carts:Cart[] = await this.cartService.getCart(1);
+            const carts:Cart[] = await this.cartService.getCart(1,page,limit,sortField,sortOrder);
             return success(res,httpStatusCodes.SUCCESS,"Orders fetched successfully",carts)
         } catch (error) {
             return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")

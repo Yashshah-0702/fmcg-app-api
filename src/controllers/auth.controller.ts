@@ -24,7 +24,7 @@ class AuthController {
 
       const findUser: User = await this.userService.findOneUser({ email: userData.email });
       if (findUser){
-        return failure(res,httpStatusCodes.BAD_REQUEST,"user already exist",{})
+        return failure(res,httpStatusCodes.BAD_REQUEST,"user already exist")
       }
 
       const data ={
@@ -47,7 +47,7 @@ class AuthController {
       sendEmail(userData.email,subject,html)
       return success(res,httpStatusCodes.CREATED,"signup succesfull",signUpUserData)
     } catch (error) {
-      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server Error",{})
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server Error")
     }
   };
 
@@ -55,9 +55,9 @@ class AuthController {
     try {
       const userData: LoginUserDto = req.body;
       const findUser: User = await this.userService.findOneUser({ email: userData.email });
-      if (!findUser) return failure(res,httpStatusCodes.BAD_REQUEST,"Invalid Credentials",{})
+      if (!findUser) return failure(res,httpStatusCodes.BAD_REQUEST,"Invalid Credentials")
       const isPasswordMatching: boolean = await compare(userData.password, findUser.password);
-      if (!isPasswordMatching ) return failure(res,httpStatusCodes.BAD_REQUEST,"Invalid Credentials",{})
+      if (!isPasswordMatching ) return failure(res,httpStatusCodes.BAD_REQUEST,"Invalid Credentials")
       const dataStoredInToken: DataStoredInToken = { _id: findUser._id , user_type:findUser.user_type ,email:findUser.email };
       const secretKey: string = JWT_SECRET;
       const expiresIn: number = parseInt(TOKEN_EXPIRY);
@@ -68,39 +68,10 @@ class AuthController {
       }
       return success(res,httpStatusCodes.SUCCESS,"login successfull",data)
     } catch (error) {
-      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server Error",{})
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server Error")
     }
   };
 
-  // public changePassword = async(req:RequestWithUser,res:Response)=>{
-  //   try {
-  //     const user: User = req.user;
-  //     let userId: string = user._id;
-  //     if(user.user_type === 1){
-  //       userId = req.params.id;
-  //     }
-  //     const userData:PassowrdDto=req.body
-  //     if(userData.newPassword !== userData.confirmPassword){
-  //       return failure(res,httpStatusCodes.BAD_REQUEST,"password does not match",{})
-  //     }
-  //     const updateUser:User = await this.userService.updateUser(userId,{password:userData.newPassword})
-  //     return success(res,httpStatusCodes.SUCCESS,"password updated",updateUser)
-  //   } catch (error) {
-  //     return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server Error",{})
-  //   }
-  // }
-
-  // public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
-  //   try {
-  //     const userData: User = req.user;
-  //     const logOutUserData: User = await this.authService.logout(userData);
-
-  //     // res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
-  //     res.status(200).json({ data: logOutUserData, message: 'logout' });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // };
 }
 
 export default AuthController;

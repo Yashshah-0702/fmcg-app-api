@@ -18,14 +18,14 @@ class UsersController {
         const userData: User = req.user;
 
         if (userData.user_type !== 1) {
-            return failure(res, httpStatusCodes.UNAUTHORIZED, "Access Denied", {});
+            return failure(res, httpStatusCodes.UNAUTHORIZED, "Access Denied",);
         }
 
         const findAllUsersData: User[] = await this.userService.findAllUser(1, page, limit, sortField, sortOrder);
 
         return success(res, httpStatusCodes.SUCCESS, "Admins fetched successfully", findAllUsersData);
     } catch (error) {
-        return failure(res, httpStatusCodes.INTERNAL_SERVER_ERROR, "Server error", {});
+        return failure(res, httpStatusCodes.INTERNAL_SERVER_ERROR, "Server error",);
     }
 }
 
@@ -37,13 +37,13 @@ class UsersController {
       const sortField = req.query.sortField as string || 'createdAt';
       const sortOrder = req.query.sortOrder as string || 'asc';
       if(userData.user_type !== 1){
-        return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied",{})
+        return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied")
       }
       const findAllUsersData: User[] = await this.userService.findAllUser(2,page,limit,sortField,sortOrder);
 
      return success(res,httpStatusCodes.SUCCESS,"Users fetched succesfully",findAllUsersData)
     } catch (error) {
-      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")
     }
   };
 
@@ -56,12 +56,12 @@ class UsersController {
       }
       const findOneUserData: User = await this.userService.findOneUser({_id:userId});
       if(!findOneUserData){
-        return failure(res,httpStatusCodes.NOT_FOUND,"User not found",{})
+        return failure(res,httpStatusCodes.NOT_FOUND,"User not found")
       }
 
       return success(res,httpStatusCodes.SUCCESS,"User profile fetched succesfully",findOneUserData)
     } catch (error) {
-      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")
     }
   };
 
@@ -75,11 +75,11 @@ class UsersController {
       let userData: CreateUserDto = req.body;
       const updateUserData: User = await this.userService.updateUser(userId, userData);
       if(!updateUserData){
-        return failure(res,httpStatusCodes.NOT_FOUND,"User not found",{})
+        return failure(res,httpStatusCodes.NOT_FOUND,"User not found")
       }
       return success(res,httpStatusCodes.SUCCESS,"User updated",updateUserData)
     } catch (error) {
-      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")
     }
   };
 
@@ -92,11 +92,11 @@ class UsersController {
       }
       const deleteUserData: User = await this.userService.deleteUser(userId);
       if(!deleteUserData){
-        return failure(res,httpStatusCodes.NOT_FOUND,"User not found",{})
+        return failure(res,httpStatusCodes.NOT_FOUND,"User not found")
       }
-      return success (res,httpStatusCodes.SUCCESS,"User deleted",{})
+      return success (res,httpStatusCodes.SUCCESS,"User deleted",[])
     } catch (error) {
-      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
+      return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")
     }
   };
 }

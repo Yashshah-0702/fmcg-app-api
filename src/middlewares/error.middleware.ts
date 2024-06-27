@@ -10,9 +10,9 @@ const errorMiddleware = (error: CustomError, req: Request, res: Response, next: 
     const message: string = error.message || 'Something went wrong';
 
     logger.error(`[${req.method}] ${req.path} >> StatusCode:: ${status}, Message:: ${message}`);
-    return failure(res,status,message,{});
+    return failure(res,status,message);
   } catch (error) {
-    return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
+    return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")
   }
 };
 

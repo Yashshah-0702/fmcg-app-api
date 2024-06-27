@@ -19,16 +19,16 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
         req.user = findUser;
         next();
       } else {
-        return failure(res,httpStatusCodes.UNAUTHORIZED,"Wrong authentication token",{})
+        return failure(res,httpStatusCodes.UNAUTHORIZED,"Wrong authentication token")
       }
     } else {
-      return failure(res,httpStatusCodes.ACCESS_DENIED,"Authentication token missing",{})
+      return failure(res,httpStatusCodes.ACCESS_DENIED,"Authentication token missing")
     }
   } catch (error) {
     if(error.message === "jwt expired"){
-      return failure (res,httpStatusCodes.UNAUTHORIZED,"Session expired",{})
+      return failure (res,httpStatusCodes.UNAUTHORIZED,"Session expired")
     }
-    return failure (res,httpStatusCodes.UNAUTHORIZED,"Wrong authentication token",{})
+    return failure (res,httpStatusCodes.UNAUTHORIZED,"Wrong authentication token")
   }
 };
 

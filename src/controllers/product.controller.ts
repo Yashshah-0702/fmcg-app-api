@@ -51,10 +51,10 @@ class ProductsController{
         const userData:User = req.user;
         const productImagePath = req.media_details.file_path + req.media_details.name
         if(userData.user_type!==1){
-            return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied",{})
+            return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied")
         }
         if(!req.file){
-            return failure(res,httpStatusCodes.BAD_REQUEST,"Please upload an image",{})
+            return failure(res,httpStatusCodes.BAD_REQUEST,"Please upload an image")
         }
         const productData:CreateProductDto = req.body;
         const data = {
@@ -64,7 +64,7 @@ class ProductsController{
         const createProductData:Product = await this.productService.createProduct(data);
         return success(res,httpStatusCodes.CREATED,"Product created successfully",createProductData)
      } catch (error) {
-        return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
+        return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")
      }
     }
 
@@ -73,11 +73,11 @@ class ProductsController{
             const userData:User = req.user;
             const productData:CreateProductDto = req.body;
             if(userData.user_type!==1){
-                return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied",{})
+                return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied")
             }
             const product = await this.productService.findOneProduct({_id:req.params.id});
             if(!product){
-                return failure(res,httpStatusCodes.NOT_FOUND,"Product not found",{})
+                return failure(res,httpStatusCodes.NOT_FOUND,"Product not found")
             }
             let image = product.image
             if(req.file){
@@ -92,7 +92,7 @@ class ProductsController{
             const updateProductData:Product = await this.productService.updateProduct(req.params.id,data);
             return success(res,httpStatusCodes.SUCCESS,"Product updated successfully",updateProductData)
         } catch (error) {
-            return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
+            return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error")
         }
     }
 
@@ -100,7 +100,7 @@ class ProductsController{
         try {
             const userData:User = req.user;
             if(userData.user_type!==1){
-                return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied",{})
+                return failure(res,httpStatusCodes.UNAUTHORIZED,"Access Denied")
             }
             const product = await this.productService.findOneProduct({_id:req.params.id});
             if(!product){

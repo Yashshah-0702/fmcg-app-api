@@ -44,9 +44,9 @@ const uploadImgStorage = multer({ storage: uploadImg }).single('upload_file');
 export const uploadImgMiddleware = (req: Request, res: Response, next: NextFunction) => {
   uploadImgStorage(req, res, (err: any) => {
     if (err instanceof Error && err.message === 'Invalid file format, allowed formats are jpg, png, jpeg.') {
-      return failure(res, httpStatusCodes.BAD_REQUEST, 'INVALID_FILE_FORMAT',{});
+      return failure(res, httpStatusCodes.BAD_REQUEST, 'INVALID_FILE_FORMAT');
     } else if (err) {
-      return failure(res, httpStatusCodes.INTERNAL_SERVER_ERROR, 'INTERNAL_SERVER_ERROR',{});
+      return failure(res, httpStatusCodes.INTERNAL_SERVER_ERROR, 'INTERNAL_SERVER_ERROR');
     } else {
       return next();
     }

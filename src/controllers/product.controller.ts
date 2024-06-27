@@ -88,7 +88,6 @@ class ProductsController{
             const updateProductData:Product = await this.productService.updateProduct(req.params.id,data);
             return success(res,httpStatusCodes.SUCCESS,"Product updated successfully",updateProductData)
         } catch (error) {
-            console.log(error)
             return failure(res,httpStatusCodes.INTERNAL_SERVER_ERROR,"Server error",{})
         }
     }

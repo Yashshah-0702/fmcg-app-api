@@ -1,11 +1,10 @@
-import { Product } from "./products.interface";
-import { User } from "./users.interface";
-
-export interface Cart{
-    _id:string;
-    products:Product[];
-    user_id:string;
-    quantity:number;
-    total_price:number;
-    status:number
+export interface Cart {
+    products: {
+        product: string; // or ObjectId if you are using Types.ObjectId
+        quantity: number;
+    }[];
+    user_id: string; // or ObjectId if you are using Types.ObjectId
+    total_quantity: number;
+    total_price: number;
+    status: number;
 }

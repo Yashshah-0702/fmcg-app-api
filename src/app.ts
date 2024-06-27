@@ -42,9 +42,9 @@ class App {
   public async closeDatabaseConnection(): Promise<void> {
     try {
       await disconnect();
-      console.log('Disconnected from MongoDB');
+      logger.error('Disconnected from MongoDB');
     } catch (error) {
-      console.error('Error closing database connection:', error);
+      logger.error('Error closing database connection:', error);
     }
   }
 
